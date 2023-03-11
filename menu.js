@@ -97,11 +97,10 @@ document.addEventListener("keydown", function(event) { // Faz o "slide" ao apert
                                     }
 });
 
-const pagina = document.getElementById(document); // substitua "meu-elemento" pelo id do seu elemento de animação
 
-let initialY = null; // variável para armazenar a posição inicial do dedo na tela
+let initialY = null; 
 
-pagina.addEventListener("touchmove", function(event) {
+document.addEventListener("touchmove", function(event) {
   if (initialY === null) {
     initialY = event.touches[0].clientY; // armazena a posição inicial do dedo
   }
@@ -114,8 +113,9 @@ pagina.addEventListener("touchmove", function(event) {
   }
 
   // reseta a posição inicial quando o movimento do dedo termina
-  element.addEventListener("touchend", function() {
+  document.addEventListener("touchend", function() {
     initialY = null;
+    document.removeEventListener("touchend", arguments.callee);
   });
 });
 
