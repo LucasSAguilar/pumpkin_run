@@ -58,11 +58,8 @@ function iniciarJogo(){
 
   pontuacao_game.html('0')
   $('.menu').css('display', 'none')
-  definirVelocidade()  
-  contagem();
+  $('.game').css('display', 'block')
 
-
-  
   // Adicionar a função rotacionarTela aqui
   function rotacionarTela() {
     if (screen.orientation.lock) {
@@ -76,6 +73,10 @@ function iniciarJogo(){
 
   rotacionarTela(); // chamar a função de rotação
 
+
+  definirVelocidade()  
+  contagem();
+  
 
   // Deixa em tela cheia
   const elemento = document.documentElement;
@@ -148,7 +149,6 @@ document.addEventListener("touchmove", function(event) {
 // Contagem para iniciar - chamada nas ações iniciais
 function contagem() {
   $('.tutorial').css('display', 'block')
-  $('.game').css('display', 'block')
   $('.contagem_game').css('display', 'block')
 
   setTimeout(function() {
