@@ -62,7 +62,9 @@ function iniciarJogo(){
   contagem();
 
 
-   function rotacionarTela() {
+  
+  // Adicionar a função rotacionarTela aqui
+  function rotacionarTela() {
     if (screen.orientation.lock) {
       screen.orientation.lock("landscape");
     } else if (screen.lockOrientation) {
@@ -73,12 +75,19 @@ function iniciarJogo(){
   }
 
   rotacionarTela(); // chamar a função de rotação
-  music_game.play();
-  music_game.currentTime = 0;
-  music_menu.pause();
-  
-};
-  
+
+
+  // Deixa em tela cheia
+  const elemento = document.documentElement;
+  if (elemento.requestFullscreen) {
+    elemento.requestFullscreen();
+  } else if (elemento.mozRequestFullScreen) { /* Firefox */
+    elemento.mozRequestFullScreen();
+  } else if (elemento.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+    elemento.webkitRequestFullscreen();
+  } else if (elemento.msRequestFullscreen) { /* IE/Edge */
+    elemento.msRequestFullscreen();
+  }
   
   music_game.play();
   music_game.currentTime = 0;
