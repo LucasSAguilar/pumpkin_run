@@ -11,6 +11,7 @@ var enemyCloneNj
 var firstEnemy = 'x'
 var ht_gerado = false
 var nj_gerado = false
+var createEnemy
 // Regras de iniciação
 let iniciouGame = false;
 var reiniciou = false;
@@ -18,6 +19,7 @@ var gameOver = false
 var velocidadeTela
 var pontuacao = 0
 var pontuacao_maxima = 0
+var carregarSprites = true
 // Verificando status do personagem
 var noAr = false;
 var noSlide = false
@@ -89,10 +91,25 @@ function iniciarJogo(){
 
 
   rotacionarTela(); // chamar a função de rotação
-  definirVelocidade()  
-  contagem();
-  
-  
+
+if (carregarSprites === true){
+    iniciouGame = true
+    createEnemy = 1
+    gerarInimigo()
+    createEnemy = 0
+    gerarInimigo()
+    player.css('opacity', '0')
+    enemyClone.css('opacity', '0')
+    enemyCloneNj.css('opacity', '0')
+    animacao_pulo()
+    setTimeout(animacao_slide, 1000)
+    setTimeout(contagem, 2000)
+    carregarSprites = false
+    iniciouGame = false
+    
+  }
+  else {
+  contagem()}
 };
 
 
@@ -149,6 +166,10 @@ document.addEventListener("touchmove", function(event) {
 function contagem() {
   $('.tutorial').css('display', 'block')
   $('.contagem_game').css('display', 'block')
+  $('.contagem_game').html('3...')
+  player.css('opacity', '1')
+  enemyClone.css('opacity', '1')
+  enemyCloneNj.css('opacity', '1')
 
   setTimeout(function() {
     $('.contagem_game').html('2...')
@@ -165,6 +186,8 @@ function contagem() {
           $('.contagem_game').css('display', 'none')
           $('.contagem_game').html('3...')
           iniciouGame = true;
+
+          definirVelocidade()  
           interval_colisao = setInterval(detectarColisao, 50)
           calculo_pontuacao = setInterval(calcularPontuacao, 500)
           gera_inimigo = setInterval(gerarInimigo, 2000);
@@ -185,7 +208,10 @@ function definirVelocidade() {
   var tamanhoTela = window.screen.width
     if(tamanhoTela <= 700){
       velocidadeTela = 1000
-    } else if (tamanhoTela > 700){
+    } else if (tamanhoTela > 700 && tamanhoTela < 850){
+      velocidadeTela = 1500
+    }
+    else {
       velocidadeTela = 2000
     }
 
@@ -251,7 +277,7 @@ function animacao_slide() {
 // Gera um inimigo randomicamente - Convocado durante o jogo a cada 2s
   function gerarInimigo() {
 
-  var createEnemy = Math.floor(Math.random() * 2)
+  createEnemy = Math.floor(Math.random() * 2)
   if (iniciouGame === true && gameOver === false){
   
   
@@ -288,7 +314,7 @@ function animacao_slide() {
 
 
   function detectarColisao() {
-  if(iniciouGame === true){
+  if(iniciouGame === true && carregarSprites === false){
       
     var playerPos = player.position();
   

@@ -14,6 +14,7 @@
     background-image: url(../pk_andando.png);
     background-repeat: no-repeat;
     animation: animacao_pk 0.5s steps(8) infinite;
+    transition: 1s;
   }
   
   @keyframes animacao_pk {
