@@ -98,6 +98,8 @@ document.addEventListener("keydown", function(event) { // Faz o "slide" ao apert
 });
 
 
+// Faz o "slide" ao deslizar o dedo
+
 let initialY = null; 
 
 document.addEventListener("touchmove", function(event) {
