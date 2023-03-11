@@ -97,13 +97,27 @@ document.addEventListener("keydown", function(event) { // Faz o "slide" ao apert
                                     }
 });
 
-document.addEventListener("touchmove", function(event) { // Faz o slide ao deslizar o dedo
-      if (event.changedTouches[0].pageY > event.touches[0].pageY) {
-      console.log("Dedo deslizou para baixo");
-      animacao_slide()                                            }
+const pagina = document.getElementById(document); // substitua "meu-elemento" pelo id do seu elemento de animação
+
+let initialY = null; // variável para armazenar a posição inicial do dedo na tela
+
+pagina.addEventListener("touchmove", function(event) {
+  if (initialY === null) {
+    initialY = event.touches[0].clientY; // armazena a posição inicial do dedo
+  }
+
+  const currentY = event.touches[0].clientY; // posição atual do dedo
+
+  if (currentY > initialY) {
+    console.log("Deslizando para baixo");
+    animacao_slide();
+  }
+
+  // reseta a posição inicial quando o movimento do dedo termina
+  element.addEventListener("touchend", function() {
+    initialY = null;
+  });
 });
-
-
 
 
 
