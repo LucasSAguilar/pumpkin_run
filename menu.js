@@ -122,6 +122,13 @@ $('html').on('click', function(event) {  // Pula ao clicar na tela
       animacao_pulo();}
   })
 
+  $('html').on('keydown', function(event) { // Pula ao apertar seta para cima
+    if (event.key === "ArrowUp") {
+      console.log('detectado: press arrow up');
+      animacao_pulo();
+    }
+  })
+
 
 $('html').on('keydown', function(event) { // Pula ao apertar espaço
       if (event.key === " ") {
