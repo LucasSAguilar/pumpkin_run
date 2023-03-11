@@ -439,6 +439,7 @@ btt_home.on('click', ()=>{
   pontuacao = 0
   gameOver = false
   iniciouGame = false
+  carregarSprites = true
   
 
 })
