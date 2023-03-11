@@ -92,24 +92,8 @@ function iniciarJogo(){
 
   rotacionarTela(); // chamar a função de rotação
 
-if (carregarSprites === true){
-    iniciouGame = true
-    createEnemy = 1
-    gerarInimigo()
-    createEnemy = 0
-    gerarInimigo()
-    player.css('opacity', '0')
-    enemyClone.css('opacity', '0')
-    enemyCloneNj.css('opacity', '0')
-    animacao_pulo()
-    setTimeout(animacao_slide, 1000)
-    setTimeout(contagem, 2000)
-    carregarSprites = false
-    iniciouGame = false
-    
-  }
-  else {
-  contagem()}
+
+  
 };
 
 
