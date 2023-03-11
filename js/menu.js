@@ -1,0 +1,371 @@
+
+
+// Declaração de variáveis globais ------------------------
+
+// Player e inimigos
+const player = $('.personagem_pk');
+const enemy = $('.personagem_ht');
+const enemy_nj = $('.personagem_nj');
+var enemyClone
+var enemyCloneNj
+var firstEnemy = 'x'
+var ht_gerado = false
+var nj_gerado = false
+// Regras de iniciação
+let iniciouGame = false;
+var reiniciou = false;
+var gameOver = false
+var velocidadeTela
+var pontuacao = 0
+var pontuacao_maxima = 0
+// Verificando status do personagem
+var noAr = false;
+var noSlide = false
+// Capturando entidades do projeto
+var tela_gameOver = $('.tela_fim_jogo')
+const btt_restart = $('.restart_btt')
+const btt_home = $('.home_btt')
+var pontuacao_game = $('.pontuacao_game')
+var music_menu = new Audio('../musics/menu_game.mp3');
+var music_game = new Audio('../musics/game.mp3');
+//variaveis de setInterval 
+var interval_colisao
+var calculo_pontuacao
+var gera_inimigo
+var aumentar_velocidade
+
+
+
+// Declaração de variáveis globais ------------------------
+
+
+// ------------------- AÇÕES INICIAIS ------------------
+
+// Rotaciona a tela do celular e inicia o jogo ---------------------- 
+
+$(document).ready(()=>{
+  music_menu.play();
+  music_game.pause();
+
+  if (screen.orientation.lock) {
+    screen.orientation.lock("landscape");
+  } else if (screen.lockOrientation) {
+    screen.lockOrientation("landscape");
+  } else {
+    alert("Não foi possível rotacionar a tela");
+  }
+})
+
+
+// Inicia a tela "game" ao apertar play -----------------------
+$('.btt_play_menu').on('click', iniciarJogo) 
+
+function iniciarJogo(){
+
+  pontuacao_game.html('0')
+  $('.menu').css('display', 'none')
+  definirVelocidade()  
+  contagem();
+
+  music_game.play();
+  music_menu.pause();
+
+};
+
+
+// Sistema de controle de personagem -------------
+
+$('html').on('click', function(event) {  // Pula ao clicar na tela
+  if (!$(event.target).is('.restart_btt')) {
+      console.log('detectado: click');
+      animacao_pulo();}
+  })
+
+
+$('html').on('keydown', function(event) { // Pula ao apertar espaço
+      if (event.key === " ") {
+        console.log('detectado: press space');
+          animacao_pulo();        }
+})
+
+document.addEventListener("keydown", function(event) { // Faz o "slide" ao apertar a seta
+      if (event.key === "ArrowDown") {
+      console.log("Seta para baixo pressionada");
+      animacao_slide()
+                                    }
+});
+
+document.addEventListener("touchmove", function(event) { // Faz o slide ao deslizar o dedo
+      if (event.changedTouches[0].pageY > event.touches[0].pageY) {
+      console.log("Dedo deslizou para baixo");
+      animacao_slide()                                            }
+});
+
+
+
+
+
+//----------------------- FUNÇÕES A SEREM CONVOCADAS ----------------------
+// Contagem para iniciar - chamada nas ações iniciais
+function contagem() {
+  $('.game').css('display', 'block')
+  $('.contagem_game').css('display', 'block')
+
+  setTimeout(function() {
+    $('.contagem_game').html('2...')
+  
+    setTimeout(function() {
+      $('.contagem_game').html('1...')
+
+      setTimeout(function() {
+        $('.contagem_game').html('VAI')
+        
+        setTimeout(function() {
+
+
+          $('.contagem_game').css('display', 'none')
+          $('.contagem_game').html('3...')
+          iniciouGame = true;
+          interval_colisao = setInterval(detectarColisao, 50)
+          calculo_pontuacao = setInterval(calcularPontuacao, 500)
+          gera_inimigo = setInterval(gerarInimigo, 2000);
+          aumentar_velocidade = setInterval(aumentarVelocidade, 2000)
+
+          
+          
+        
+        }, 1000)
+      }, 1000)
+    }, 1000)
+  }, 1000)
+}
+
+
+// Define a velocidade dos inimigos a cada 500ms - Convocado nas ações iniciais
+function definirVelocidade() {
+  var tamanhoTela = window.screen.width
+    if(tamanhoTela <= 700){
+      velocidadeTela = 1000
+    } else if (tamanhoTela > 700){
+      velocidadeTela = 2000
+    }
+
+}
+
+
+// Aumenta a velocidade da tela progressivamente
+function aumentarVelocidade() {
+if (pontuacao >= 10){
+    
+   velocidadeTela = velocidadeTela - (velocidadeTela / 20)
+   console.log(`velocidade atual: ${velocidadeTela}`);
+   if(velocidadeTela < 400){clearInterval(aumentar_velocidade)}
+   
+}}
+
+// Animação de pulo - Convocado toda vez que clica ou pressiona espaço
+function animacao_pulo() {
+  if (iniciouGame === true && noAr === false) {
+    noAr = true
+ 
+    player.css('background-image', 'url(../img/assets/assets_pk/animacoes/pk_pulo.png)');
+    player.css('animation', 'animacao_pk 0.6s steps(8) infinite');
+    player.css('transition', 'bottom 0.4s')
+    player.css('bottom', '180px');
+    
+    setTimeout(() => {
+      player.css('transition', 'bottom 0.6s')
+      player.css('bottom', '0px')
+
+      setTimeout(() => {
+        noAr = false
+          player.css('background-image', 'url(../img/assets/assets_pk/animacoes/pk_andando.png)');
+          player.css('animation', 'animacao_pk 0.6s steps(8) infinite');
+      }, 550);
+      
+    }, 400);
+  }
+}
+
+// Animação de slide - Convocado toda vez que aperta seta para baixo ou touch pra baixo
+
+function animacao_slide() {
+  if (iniciouGame === true && noAr === false && gameOver === false) {
+
+      player.css('background-image', 'url(../img/assets/assets_pk/animacoes/slide_pk.png)');
+      player.css('animation', 'none');
+      player.css('scale', '0.9');
+      player.css('bottom', '-2px');
+
+      setTimeout(() => {
+
+          player.css('background-image', 'url(../img/assets/assets_pk/animacoes/pk_andando.png)');
+          player.css('animation', 'animacao_pk 0.6s steps(8) infinite');
+          player.css('scale', '1')
+
+      }, 650);
+          
+  }
+}
+
+
+// Gera um inimigo randomicamente - Convocado durante o jogo a cada 2s
+  function gerarInimigo() {
+
+  var createEnemy = Math.floor(Math.random() * 2)
+  if (iniciouGame === true && gameOver === false){
+  
+  
+  // Faz o primeiro inimigo ser o hunter - Convocado quando o jogo abre
+    if(firstEnemy == 'x'){
+      createEnemy = 1
+      firstEnemy = 'z'
+  }
+
+    if (createEnemy == 1){ // Cria o inimigo HUNTER
+            ht_gerado = true
+            enemyClone = enemy.clone(); // Clona a div original
+            enemyClone.addClass('personagem_ht');
+            enemyClone.appendTo("body"); // Adiciona a div clonada ao corpo do documento
+            enemyClone.css('display', 'block')
+            enemyClone.animate({right: '100%'}, velocidadeTela, 'linear', function() {
+  })                      }
+
+
+    else if (createEnemy == 0){ // Cria o inimigo ninja
+
+          nj_gerado = true
+          enemyCloneNj = enemy_nj.clone(); // Clona a div original
+          enemyCloneNj.addClass('personagem_nj'); 
+          enemyCloneNj.appendTo("body"); // Adiciona a div clonada ao corpo do documento
+          enemyCloneNj.css('display', 'block')
+          enemyCloneNj.animate({right: '100%'}, velocidadeTela, 'linear', function() {
+      
+    })
+}}}
+
+
+// Verifica se houve colisão entre player e inimigo Hunter a cada 50ms
+
+
+  function detectarColisao() {
+  if(iniciouGame === true){
+      
+    var playerPos = player.position();
+  
+      var playerLeft = playerPos.left;
+      var playerRight = playerLeft + player.width();
+      var playerTop = playerPos.top;
+      var playerBottom = playerTop + player.height();
+
+  if (ht_gerado === true){
+
+      var enemyPos = enemyClone.position();
+
+      var enemyLeft = enemyPos.left;
+      var enemyRight = enemyLeft + enemyClone.width();
+      var enemyTop = enemyPos.top;
+      var enemyBottom = enemyTop + enemyClone.height();
+}
+  // Verificar se há colisão
+  if (playerRight >= enemyLeft && playerLeft <= enemyRight && playerBottom >= enemyTop && playerTop <= enemyBottom) {
+
+    console.log('Colisão detectada inimigo: 1');
+    gameOver = true
+    finalizarGame()
+    
+    enemyClone.remove();
+  }
+
+  // Verifica se houve colisão entre player e NINJA a cada 50ms
+
+
+  var playerRight = playerLeft + player.width();
+  var playerTop = playerPos.top;
+  var playerBottom = playerTop + player.height();
+
+  if(nj_gerado === true){
+
+      var enemyNjPos = enemyCloneNj.position();
+      var enemyNjLeft = enemyNjPos.left;
+      var enemyNjRight = enemyNjLeft + enemyCloneNj.width();
+      var enemyNjTop = enemyNjPos.top;
+      var enemyNjBottom = enemyNjTop + enemyCloneNj.height();
+  }
+  // Verificar se há colisão
+  if (playerRight >= enemyNjLeft && playerLeft <= enemyNjRight && playerBottom >= enemyNjTop && playerTop <= enemyNjBottom) {
+    
+        console.log("Colisão detectada inimigo: 0");
+        gameOver = true
+        finalizarGame()
+
+        enemyCloneNj.remove();}
+    
+  }}
+
+// Função de derrota chamada quando ocorre uma colisão
+  function finalizarGame(){
+
+        // Faz os intervalos ativos do game pararem
+          clearInterval(calculo_pontuacao)
+          clearInterval(interval_colisao)
+          clearInterval(aumentar_velocidade);
+
+    tela_gameOver.css('display', 'flex')
+    player.css('display', 'none')
+    
+    $('.pontuacao_final').html(`Fugiu por: ${pontuacao} metros`)
+    $('.maiorPontuacao').html(`Mas já me disseram que seu maior recorde foi de: ${pontuacao_maxima} metros`)
+    console.log(pontuacao);
+
+  }
+
+  // Aumenta a pontuação do player em 1 ponto a cada 500ms quando a partida inicia
+  
+  function calcularPontuacao(){
+   
+    if(iniciouGame === true && gameOver === false){
+      pontuacao = pontuacao + 1
+      pontuacao_game.html(pontuacao)
+
+      if(pontuacao > pontuacao_maxima){
+        pontuacao_maxima = pontuacao
+      }
+                                                  }}
+
+
+// ------------------ PROCESSO PÓS FIM DE JOGO --------------------- //
+
+btt_restart.on('click', ()=>{
+
+console.log('Clicou em restart');
+
+tela_gameOver.css('display', 'none')
+player.css('display', 'block')
+// reseta condições
+pontuacao = 0
+gameOver = false
+iniciouGame = true
+iniciarJogo()
+clearInterval(gera_inimigo);
+
+})
+
+
+btt_home.on('click', ()=>{
+  // reseta tela
+  $('.menu').css('display', 'flex')
+  $('.game').css('display', 'none')
+  tela_gameOver.css('display', 'none')
+  player.css('display', 'block')
+  music_menu.play();
+  music_game.pause();
+
+  clearInterval(gera_inimigo);
+  // reseta condições
+  pontuacao = 0
+  gameOver = false
+  iniciouGame = false
+  
+
+})
