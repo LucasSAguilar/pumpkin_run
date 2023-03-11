@@ -43,7 +43,6 @@ var aumentar_velocidade
 
 // ------------------- AÇÕES INICIAIS ------------------
 
-// Rotaciona a tela do celular e inicia o jogo ---------------------- 
 
 $(document).ready(()=>{
   music_menu.play();
@@ -213,9 +212,9 @@ function definirVelocidade() {
     } else if (tamanhoTela > 700 && tamanhoTela < 850){
       velocidadeTela = 1500
     }
-    else {
+      else {
       velocidadeTela = 2000
-    }
+     }
 
 }
 
@@ -238,7 +237,7 @@ function animacao_pulo() {
     player.css('background-image', 'url(pk_pulo.png)');
     player.css('animation', 'animacao_pk 0.6s steps(8) infinite');
     player.css('transition', 'bottom 0.4s')
-    player.css('bottom', '180px');
+    player.css('bottom', '190px');
     
     setTimeout(() => {
       player.css('transition', 'bottom 0.6s')
