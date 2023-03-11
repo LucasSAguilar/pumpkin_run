@@ -57,8 +57,7 @@ $(document).ready(()=>{
 })
 
 
-// Inicia a tela "game" ao apertar play -----------------------
-$('.btt_play_menu').on('click', iniciarJogo) 
+// Inicia a tela "game" ao apertar play -----------------------$('.btt_play_menu').on('click', iniciarJogo) 
 
 function iniciarJogo(){
 
@@ -74,22 +73,22 @@ function iniciarJogo(){
   } else {
     alert("Não foi possível rotacionar a tela");
   }
-  
+
   const elemento = document.documentElement;
+
   if (elemento.requestFullscreen) {
     elemento.requestFullscreen();
-  } else if (elemento.mozRequestFullScreen) { /* Firefox */
-    elemento.mozRequestFullScreen();
-  } else if (elemento.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+  } else if (elemento.webkitRequestFullscreen) {
     elemento.webkitRequestFullscreen();
-  } else if (elemento.msRequestFullscreen) { /* IE/Edge */
+  } else if (elemento.mozRequestFullScreen) {
+    elemento.mozRequestFullScreen();
+  } else if (elemento.msRequestFullscreen) {
     elemento.msRequestFullscreen();
   }
-  
+
   music_game.play();
   music_game.currentTime = 0;
-  music_menu.pause();
-  
+  music_menu.pause();  
 };
 
 
