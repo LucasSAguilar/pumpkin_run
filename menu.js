@@ -67,21 +67,29 @@ function iniciarJogo(){
   definirVelocidade()  
   contagem();
 
-  
+  if (screen.orientation.lock) {
+    screen.orientation.lock("landscape");
+  } else if (screen.lockOrientation) {
     screen.lockOrientation("landscape");
-
-
-const elemento = document.body;
-elemento.requestFullscreen();
-
-
-
-
+  } else {
+    alert("Não foi possível rotacionar a tela");
+  }
+  
+  const elemento = document.documentElement;
+  if (elemento.requestFullscreen) {
+    elemento.requestFullscreen();
+  } else if (elemento.mozRequestFullScreen) { /* Firefox */
+    elemento.mozRequestFullScreen();
+  } else if (elemento.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+    elemento.webkitRequestFullscreen();
+  } else if (elemento.msRequestFullscreen) { /* IE/Edge */
+    elemento.msRequestFullscreen();
+  }
+  
   music_game.play();
   music_game.currentTime = 0;
   music_menu.pause();
   
-
 };
 
 
