@@ -47,19 +47,14 @@ $(document).ready(()=>{
   music_menu.play();
   music_game.pause();
 
-  if (screen.orientation.lock) {
-    screen.orientation.lock("landscape");
-  } else if (screen.lockOrientation) {
-    screen.lockOrientation("landscape");
-  } else {
-    alert("Não foi possível rotacionar a tela");
-  }
 })
 
-
-// Inicia a tela "game" ao apertar play -----------------------$('.btt_play_menu').on('click', iniciarJogo) 
+// Inicia a tela "game" ao apertar play -----------------------
+$('.btt_play_menu').on('click', iniciarJogo) 
 
 function iniciarJogo(){
+
+  console.log('att');
 
   pontuacao_game.html('0')
   $('.menu').css('display', 'none')
@@ -73,22 +68,22 @@ function iniciarJogo(){
   } else {
     alert("Não foi possível rotacionar a tela");
   }
-
+  
   const elemento = document.documentElement;
-
   if (elemento.requestFullscreen) {
     elemento.requestFullscreen();
-  } else if (elemento.webkitRequestFullscreen) {
-    elemento.webkitRequestFullscreen();
-  } else if (elemento.mozRequestFullScreen) {
+  } else if (elemento.mozRequestFullScreen) { /* Firefox */
     elemento.mozRequestFullScreen();
-  } else if (elemento.msRequestFullscreen) {
+  } else if (elemento.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+    elemento.webkitRequestFullscreen();
+  } else if (elemento.msRequestFullscreen) { /* IE/Edge */
     elemento.msRequestFullscreen();
   }
-
+  
   music_game.play();
   music_game.currentTime = 0;
-  music_menu.pause();  
+  music_menu.pause();
+  
 };
 
 
