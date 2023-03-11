@@ -71,13 +71,6 @@ function iniciarJogo(){
     }
   }
 
-  rotacionarTela(); // chamar a função de rotação
-
-
-  definirVelocidade()  
-  contagem();
-  
-
   // Deixa em tela cheia
   const elemento = document.documentElement;
   if (elemento.requestFullscreen) {
@@ -93,6 +86,12 @@ function iniciarJogo(){
   music_game.play();
   music_game.currentTime = 0;
   music_menu.pause();
+
+
+  rotacionarTela(); // chamar a função de rotação
+  definirVelocidade()  
+  contagem();
+  
   
 };
 
