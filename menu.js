@@ -91,25 +91,19 @@ function iniciarJogo(){
 
   rotacionarTela(); // chamar a função de rotação
 
+
   if (carregarSprites === true){
     iniciouGame = true
     createEnemy = 1
     gerarInimigo()
     createEnemy = 0
     gerarInimigo()
-    player.css('opacity', '0')
-    enemyClone.css('opacity', '0')
-    enemyCloneNj.css('opacity', '0')
     animacao_pulo()
     setTimeout(animacao_slide, 1000)
-    setTimeout(contagem, 2000)
     carregarSprites = false
-    iniciouGame = false
-    
   }
-  else {
-  contagem()}
 
+  contagem()
 
 };
 
@@ -172,12 +166,9 @@ document.addEventListener("touchmove", function(event) {
 //----------------------- FUNÇÕES A SEREM CONVOCADAS ----------------------
 // Contagem para iniciar - chamada nas ações iniciais
 function contagem() {
-  $('.tutorial').css('display', 'block')
   $('.contagem_game').css('display', 'block')
   $('.contagem_game').html('3...')
-  player.css('opacity', '1')
-  enemyClone.css('opacity', '1')
-  enemyCloneNj.css('opacity', '1')
+
 
   setTimeout(function() {
     $('.contagem_game').html('2...')
@@ -190,10 +181,13 @@ function contagem() {
         
         setTimeout(function() {
 
-          $('.tutorial').css('display', 'none')
+          $('.tutorial_container').css('display', 'none')
           $('.contagem_game').css('display', 'none')
           $('.contagem_game').html('3...')
           iniciouGame = true;
+          $('.personagem_ht').css('opacity', '1')
+          $('.personagem_nj').css('opacity', '1')
+          player.css('opacity', '1')
 
           definirVelocidade()  
           interval_colisao = setInterval(detectarColisao, 50)
@@ -214,14 +208,16 @@ function contagem() {
 // Define a velocidade dos inimigos a cada 500ms - Convocado nas ações iniciais
 function definirVelocidade() {
   var tamanhoTela = window.screen.width
-    if(tamanhoTela <= 700){
-      velocidadeTela = 1000
-    } else if (tamanhoTela > 700 && tamanhoTela < 850){
-      velocidadeTela = 1500
-    }
-      else {
-      velocidadeTela = 2000
-     }
+  
+  if(tamanhoTela <= 700){
+    velocidadeTela = 1000
+
+} else if (tamanhoTela > 700 && tamanhoTela < 850){
+    velocidadeTela = 1500
+
+} else {
+    velocidadeTela = 2000
+ }
 
 }
 
@@ -229,182 +225,182 @@ function definirVelocidade() {
 // Aumenta a velocidade da tela progressivamente
 function aumentarVelocidade() {
 if (pontuacao >= 10){
-    
-   velocidadeTela = velocidadeTela - (velocidadeTela / 20)
-   console.log(`velocidade atual: ${velocidadeTela}`);
-   if(velocidadeTela < 400){clearInterval(aumentar_velocidade)}
-   
+
+velocidadeTela = velocidadeTela - (velocidadeTela / 20)
+console.log(`velocidade atual: ${velocidadeTela}`);
+if(velocidadeTela < 400){clearInterval(aumentar_velocidade)}
+
 }}
 
 // Animação de pulo - Convocado toda vez que clica ou pressiona espaço
 function animacao_pulo() {
-  if (iniciouGame === true && noAr === false) {
-    noAr = true
- 
-    player.css('background-image', 'url(pk_pulo.png)');
-    player.css('animation', 'animacao_pk 0.6s steps(8) infinite');
-    player.css('transition', 'bottom 0.4s')
-    player.css('bottom', '190px');
-    
-    setTimeout(() => {
-      player.css('transition', 'bottom 0.6s')
-      player.css('bottom', '0px')
+if (iniciouGame === true && noAr === false) {
+noAr = true
 
-      setTimeout(() => {
-        noAr = false
-          player.css('background-image', 'url(pk_andando.png)');
-          player.css('animation', 'animacao_pk 0.6s steps(8) infinite');
-      }, 550);
-      
-    }, 400);
-  }
+player.css('background-image', 'url(pk_pulo.png)');
+player.css('animation', 'animacao_pk 0.6s steps(8) infinite');
+player.css('transition', 'bottom 0.4s')
+player.css('bottom', '190px');
+
+setTimeout(() => {
+  player.css('transition', 'bottom 0.6s')
+  player.css('bottom', '0px')
+
+  setTimeout(() => {
+    noAr = false
+      player.css('background-image', 'url(pk_andando.png)');
+      player.css('animation', 'animacao_pk 0.6s steps(8) infinite');
+  }, 550);
+  
+}, 400);
+}
 }
 
 // Animação de slide - Convocado toda vez que aperta seta para baixo ou touch pra baixo
 
 function animacao_slide() {
-  if (iniciouGame === true && noAr === false && gameOver === false) {
+if (iniciouGame === true && noAr === false && gameOver === false) {
 
-      player.css('background-image', 'url(slide_pk.png)');
-      player.css('animation', 'none');
-      player.css('scale', '0.9');
-      player.css('bottom', '-2px');
+  player.css('background-image', 'url(slide_pk.png)');
+  player.css('animation', 'none');
+  player.css('scale', '0.9');
+  player.css('bottom', '-2px');
 
-      setTimeout(() => {
+  setTimeout(() => {
 
-          player.css('background-image', 'url(pk_andando.png)');
-          player.css('animation', 'animacao_pk 0.6s steps(8) infinite');
-          player.css('scale', '1')
+      player.css('background-image', 'url(pk_andando.png)');
+      player.css('animation', 'animacao_pk 0.6s steps(8) infinite');
+      player.css('scale', '1')
 
-      }, 650);
-          
-  }
+  }, 650);
+      
+}
 }
 
 
 // Gera um inimigo randomicamente - Convocado durante o jogo a cada 2s
-  function gerarInimigo() {
+function gerarInimigo() {
 
-  createEnemy = Math.floor(Math.random() * 2)
-  if (iniciouGame === true && gameOver === false){
+createEnemy = Math.floor(Math.random() * 2)
+if (iniciouGame === true && gameOver === false){
+
+
+// Faz o primeiro inimigo ser o hunter - Convocado quando o jogo abre
+if(firstEnemy == 'x'){
+  createEnemy = 1
+  firstEnemy = 'z'
+}
+
+if (createEnemy == 1){ // Cria o inimigo HUNTER
+        ht_gerado = true
+        enemyClone = enemy.clone(); // Clona a div original
+        enemyClone.addClass('personagem_ht');
+        enemyClone.appendTo("body"); // Adiciona a div clonada ao corpo do documento
+        enemyClone.css('display', 'block')
+        enemyClone.animate({right: '100%'}, velocidadeTela, 'linear', function() {
+})                      }
+
+
+else if (createEnemy == 0){ // Cria o inimigo ninja
+
+      nj_gerado = true
+      enemyCloneNj = enemy_nj.clone(); // Clona a div original
+      enemyCloneNj.addClass('personagem_nj'); 
+      enemyCloneNj.appendTo("body"); // Adiciona a div clonada ao corpo do documento
+      enemyCloneNj.css('display', 'block')
+      enemyCloneNj.animate({right: '100%'}, velocidadeTela, 'linear', function() {
   
-  
-  // Faz o primeiro inimigo ser o hunter - Convocado quando o jogo abre
-    if(firstEnemy == 'x'){
-      createEnemy = 1
-      firstEnemy = 'z'
-  }
-
-    if (createEnemy == 1){ // Cria o inimigo HUNTER
-            ht_gerado = true
-            enemyClone = enemy.clone(); // Clona a div original
-            enemyClone.addClass('personagem_ht');
-            enemyClone.appendTo("body"); // Adiciona a div clonada ao corpo do documento
-            enemyClone.css('display', 'block')
-            enemyClone.animate({right: '100%'}, velocidadeTela, 'linear', function() {
-  })                      }
-
-
-    else if (createEnemy == 0){ // Cria o inimigo ninja
-
-          nj_gerado = true
-          enemyCloneNj = enemy_nj.clone(); // Clona a div original
-          enemyCloneNj.addClass('personagem_nj'); 
-          enemyCloneNj.appendTo("body"); // Adiciona a div clonada ao corpo do documento
-          enemyCloneNj.css('display', 'block')
-          enemyCloneNj.animate({right: '100%'}, velocidadeTela, 'linear', function() {
-      
-    })
+})
 }}}
 
 
 // Verifica se houve colisão entre player e inimigo Hunter a cada 50ms
 
 
-  function detectarColisao() {
-  if(iniciouGame === true && carregarSprites === false){
-      
-    var playerPos = player.position();
+function detectarColisao() {
+if(iniciouGame === true && carregarSprites === false){
   
-      var playerLeft = playerPos.left;
-      var playerRight = playerLeft + player.width();
-      var playerTop = playerPos.top;
-      var playerBottom = playerTop + player.height();
+var playerPos = player.position();
 
-  if (ht_gerado === true){
-
-      var enemyPos = enemyClone.position();
-
-      var enemyLeft = enemyPos.left;
-      var enemyRight = enemyLeft + enemyClone.width();
-      var enemyTop = enemyPos.top;
-      var enemyBottom = enemyTop + enemyClone.height();
-}
-  // Verificar se há colisão
-  if (playerRight >= enemyLeft && playerLeft <= enemyRight && playerBottom >= enemyTop && playerTop <= enemyBottom) {
-
-    console.log('Colisão detectada inimigo: 1');
-    gameOver = true
-    finalizarGame()
-    
-    enemyClone.remove();
-  }
-
-  // Verifica se houve colisão entre player e NINJA a cada 50ms
-
-
+  var playerLeft = playerPos.left;
   var playerRight = playerLeft + player.width();
   var playerTop = playerPos.top;
   var playerBottom = playerTop + player.height();
 
-  if(nj_gerado === true){
+if (ht_gerado === true){
 
-      var enemyNjPos = enemyCloneNj.position();
-      var enemyNjLeft = enemyNjPos.left;
-      var enemyNjRight = enemyNjLeft + enemyCloneNj.width();
-      var enemyNjTop = enemyNjPos.top;
-      var enemyNjBottom = enemyNjTop + enemyCloneNj.height();
-  }
-  // Verificar se há colisão
-  if (playerRight >= enemyNjLeft && playerLeft <= enemyNjRight && playerBottom >= enemyNjTop && playerTop <= enemyNjBottom) {
-    
-        console.log("Colisão detectada inimigo: 0");
-        gameOver = true
-        finalizarGame()
+  var enemyPos = enemyClone.position();
 
-        enemyCloneNj.remove();}
-    
-  }}
+  var enemyLeft = enemyPos.left;
+  var enemyRight = enemyLeft + enemyClone.width();
+  var enemyTop = enemyPos.top;
+  var enemyBottom = enemyTop + enemyClone.height();
+}
+// Verificar se há colisão
+if (playerRight >= enemyLeft && playerLeft <= enemyRight && playerBottom >= enemyTop && playerTop <= enemyBottom) {
+
+console.log('Colisão detectada inimigo: 1');
+gameOver = true
+finalizarGame()
+
+enemyClone.remove();
+}
+
+// Verifica se houve colisão entre player e NINJA a cada 50ms
+
+
+var playerRight = playerLeft + player.width();
+var playerTop = playerPos.top;
+var playerBottom = playerTop + player.height();
+
+if(nj_gerado === true){
+
+  var enemyNjPos = enemyCloneNj.position();
+  var enemyNjLeft = enemyNjPos.left;
+  var enemyNjRight = enemyNjLeft + enemyCloneNj.width();
+  var enemyNjTop = enemyNjPos.top;
+  var enemyNjBottom = enemyNjTop + enemyCloneNj.height();
+}
+// Verificar se há colisão
+if (playerRight >= enemyNjLeft && playerLeft <= enemyNjRight && playerBottom >= enemyNjTop && playerTop <= enemyNjBottom) {
+
+    console.log("Colisão detectada inimigo: 0");
+    gameOver = true
+    finalizarGame()
+
+    enemyCloneNj.remove();}
+
+}}
 
 // Função de derrota chamada quando ocorre uma colisão
-  function finalizarGame(){
+function finalizarGame(){
 
-        // Faz os intervalos ativos do game pararem
-          clearInterval(calculo_pontuacao)
-          clearInterval(interval_colisao)
-          clearInterval(aumentar_velocidade);
+    // Faz os intervalos ativos do game pararem
+      clearInterval(calculo_pontuacao)
+      clearInterval(interval_colisao)
+      clearInterval(aumentar_velocidade);
 
-    tela_gameOver.css('display', 'flex')
-    player.css('display', 'none')
-    
-    $('.pontuacao_final').html(`Fugiu por: ${pontuacao} metros`)
-    $('.maiorPontuacao').html(`Mas já me disseram que seu maior recorde foi de: ${pontuacao_maxima} metros`)
-    console.log(pontuacao);
+tela_gameOver.css('display', 'flex')
+player.css('display', 'none')
 
+$('.pontuacao_final').html(`Fugiu por: ${pontuacao} metros`)
+$('.maiorPontuacao').html(`Mas já me disseram que seu maior recorde foi de: ${pontuacao_maxima} metros`)
+console.log(pontuacao);
+
+}
+
+// Aumenta a pontuação do player em 1 ponto a cada 500ms quando a partida inicia
+
+function calcularPontuacao(){
+
+if(iniciouGame === true && gameOver === false){
+  pontuacao = pontuacao + 1
+  pontuacao_game.html(pontuacao)
+
+  if(pontuacao > pontuacao_maxima){
+    pontuacao_maxima = pontuacao
   }
-
-  // Aumenta a pontuação do player em 1 ponto a cada 500ms quando a partida inicia
-  
-  function calcularPontuacao(){
-   
-    if(iniciouGame === true && gameOver === false){
-      pontuacao = pontuacao + 1
-      pontuacao_game.html(pontuacao)
-
-      if(pontuacao > pontuacao_maxima){
-        pontuacao_maxima = pontuacao
-      }
-                                                  }}
+                                              }}
 
 
 // ------------------ PROCESSO PÓS FIM DE JOGO --------------------- //
@@ -430,22 +426,30 @@ music_menu.pause();
 
 
 btt_home.on('click', ()=>{
-  // reseta tela
-  $('.menu').css('display', 'flex')
-  $('.game').css('display', 'none')
-  tela_gameOver.css('display', 'none')
-  player.css('display', 'block')
+// reseta tela
+$('.menu').css('display', 'flex')
+$('.game').css('display', 'none')
+tela_gameOver.css('display', 'none')
+player.css('display', 'block')
 
-  music_menu.play();
-  music_menu.currentTime = 0;
-  music_game.pause();
+player.css('opacity', '0')
+$('.personagem_ht').css('opacity', '0')
+$('.personagem_nj').css('opacity', '0')
+enemyClone.css('opacity', '0')
+enemyCloneNj.css('opacity', '0')
 
-  clearInterval(gera_inimigo);
-  // reseta condições
-  pontuacao = 0
-  gameOver = false
-  iniciouGame = false
-  carregarSprites = true
-  
+
+
+music_menu.play();
+music_menu.currentTime = 0;
+music_game.pause();
+
+clearInterval(gera_inimigo);
+// reseta condições
+pontuacao = 0
+gameOver = false
+iniciouGame = false
+carregarSprites = true
+
 
 })
